@@ -36,8 +36,8 @@ type Options struct {
 	// It defaults to 2.
 	CurveNumber int
 
-	width       int
-	height      int
+	width  int
+	height int
 }
 
 func newDefaultOption(width, height int) *Options {
@@ -149,7 +149,7 @@ func drawSineCurve(img *image.NRGBA, opts *Options) {
 	if flip {
 		yFlip = -1.0
 	}
-	curveColor := randomDarkGray()
+	curveColor := randomDarkColor()
 
 	for x1 := xStart; x1 <= xEnd; x1++ {
 		y := math.Sin(math.Pi*angle*float64(x1)/float64(opts.width)) * curveHeight * yFlip
@@ -157,10 +157,12 @@ func drawSineCurve(img *image.NRGBA, opts *Options) {
 	}
 }
 
-func randomDarkGray() color.Gray {
-	gray := rng.Intn(128) + 20
+func randomDarkColor() hsva {
+	hue := float64(rng.Intn(361)) / 360
+	saturation := 0.6 + rng.Float64() * 0.2
+	value := 0.25 + rng.Float64() * 0.2
 
-	return color.Gray{Y: uint8(gray)}
+	return hsva{h: hue, s:saturation, v:value, a:uint8(255)}
 }
 
 func drawText(text string, img *image.NRGBA, opts *Options) error {
@@ -174,10 +176,10 @@ func drawText(text string, img *image.NRGBA, opts *Options) error {
 	fontSpacing := opts.width / len(text)
 
 	for idx, char := range text {
-		fontScale := 1 + rng.Float64() * 0.5
+		fontScale := 1 + rng.Float64()*0.5
 		fontSize := float64(opts.height) / fontScale
 		ctx.SetFontSize(fontSize)
-		ctx.SetSrc(image.NewUniform(randomDarkGray()))
+		ctx.SetSrc(image.NewUniform(randomDarkColor()))
 		x := fontSpacing*idx + fontSpacing/int(fontSize)
 		y := opts.height/6 + rng.Intn(opts.height/3) + int(fontSize/2)
 		pt := freetype.Pt(x, y)

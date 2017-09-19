@@ -1,11 +1,11 @@
 package main
 
 import (
-	"io/ioutil"
-	"log"
 	"bytes"
 	"fmt"
 	"go/format"
+	"io/ioutil"
+	"log"
 	"path/filepath"
 )
 
