@@ -5,7 +5,6 @@ import (
 	"github.com/golang/freetype"
 	"github.com/golang/freetype/truetype"
 	"golang.org/x/image/font"
-	"golang.org/x/image/font/gofont/goregular"
 	"image"
 	"image/color"
 	"image/draw"
@@ -34,7 +33,7 @@ type Options struct {
 	// It defaults to 4.
 	TextLength int
 	// CurveNumber is the number of curves to draw on captcha image.
-	// It defaults to 3.
+	// It defaults to 2.
 	CurveNumber int
 
 	width       int
@@ -46,7 +45,7 @@ func newDefaultOption(width, height int) *Options {
 		BackgroundColor: color.Transparent,
 		CharPreset:      charPreset,
 		TextLength:      4,
-		CurveNumber:     3,
+		CurveNumber:     2,
 		width:           width,
 		height:          height,
 	}
@@ -73,7 +72,7 @@ func (data *Data) WriteTo(w io.Writer) error {
 
 func init() {
 	var err error
-	ttfFont, err = freetype.ParseFont(goregular.TTF)
+	ttfFont, err = freetype.ParseFont(TTF)
 	if err != nil {
 		panic(err)
 	}
@@ -110,7 +109,7 @@ func randomText(opts *Options) (text string) {
 }
 
 func drawNoise(img *image.NRGBA, opts *Options) {
-	noiseCount := (opts.width * opts.height) / 18
+	noiseCount := (opts.width * opts.height) / 28
 	for i := 0; i < noiseCount; i++ {
 		x := rng.Intn(opts.width)
 		y := rng.Intn(opts.height)
@@ -166,7 +165,7 @@ func randomDarkGray() color.Gray {
 
 func drawText(text string, img *image.NRGBA, opts *Options) error {
 	ctx := freetype.NewContext()
-	ctx.SetDPI(72.0)
+	ctx.SetDPI(92.0)
 	ctx.SetClip(img.Bounds())
 	ctx.SetDst(img)
 	ctx.SetHinting(font.HintingFull)
@@ -175,7 +174,7 @@ func drawText(text string, img *image.NRGBA, opts *Options) error {
 	fontSpacing := opts.width / len(text)
 
 	for idx, char := range text {
-		fontScale := 1 + float64(rng.Intn(7))/float64(9)
+		fontScale := 1 + rng.Float64() * 0.5
 		fontSize := float64(opts.height) / fontScale
 		ctx.SetFontSize(fontSize)
 		ctx.SetSrc(image.NewUniform(randomDarkGray()))
