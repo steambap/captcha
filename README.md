@@ -4,6 +4,7 @@
 
 [![GoDoc](https://godoc.org/github.com/steambap/captcha?status.svg)](https://godoc.org/github.com/steambap/captcha)
 [![Build Status](https://travis-ci.org/steambap/captcha.svg)](https://travis-ci.org/steambap/captcha)
+[![Go Report Card](https://goreportcard.com/badge/github.com/steambap/captcha)](https://goreportcard.com/report/github.com/steambap/captcha)
 
 </div>
 

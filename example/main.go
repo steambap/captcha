@@ -8,8 +8,8 @@ import (
 )
 
 func main() {
-	http.HandleFunc("/", IndexHandle)
-	http.HandleFunc("/captcha", CaptchaHandle)
+	http.HandleFunc("/", indexHandle)
+	http.HandleFunc("/captcha", captchaHandle)
 	fmt.Println("Server start at port 8080")
 	err := http.ListenAndServe(":8080", nil)
 	if err != nil {
@@ -17,7 +17,7 @@ func main() {
 	}
 }
 
-func IndexHandle(w http.ResponseWriter, _ *http.Request) {
+func indexHandle(w http.ResponseWriter, _ *http.Request) {
 	doc, err := template.ParseFiles("index.html")
 	if err != nil {
 		fmt.Fprint(w, err.Error())
@@ -26,7 +26,7 @@ func IndexHandle(w http.ResponseWriter, _ *http.Request) {
 	doc.Execute(w, nil)
 }
 
-func CaptchaHandle(w http.ResponseWriter, _ *http.Request) {
+func captchaHandle(w http.ResponseWriter, _ *http.Request) {
 	img, err := captcha.New(150, 50)
 	if err != nil {
 		fmt.Fprint(w, nil)

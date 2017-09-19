@@ -72,7 +72,7 @@ func (data *Data) WriteTo(w io.Writer) error {
 
 func init() {
 	var err error
-	ttfFont, err = freetype.ParseFont(TTF)
+	ttfFont, err = freetype.ParseFont(ttf)
 	if err != nil {
 		panic(err)
 	}
@@ -159,10 +159,10 @@ func drawSineCurve(img *image.NRGBA, opts *Options) {
 
 func randomDarkColor() hsva {
 	hue := float64(rng.Intn(361)) / 360
-	saturation := 0.6 + rng.Float64() * 0.2
-	value := 0.25 + rng.Float64() * 0.2
+	saturation := 0.6 + rng.Float64()*0.2
+	value := 0.25 + rng.Float64()*0.2
 
-	return hsva{h: hue, s:saturation, v:value, a:uint8(255)}
+	return hsva{h: hue, s: saturation, v: value, a: uint8(255)}
 }
 
 func drawText(text string, img *image.NRGBA, opts *Options) error {

@@ -21,7 +21,7 @@ func main() {
 	fmt.Fprint(buf, "// DO NOT EDIT. This file is generated.\n\n")
 	fmt.Fprint(buf, "package captcha\n\n")
 	fmt.Fprint(buf, "// The following is Comismsh TrueType font data.\n")
-	fmt.Fprint(buf, "var TTF = []byte{")
+	fmt.Fprint(buf, "var ttf = []byte{")
 	for i, x := range src {
 		if i&15 == 0 {
 			buf.WriteByte('\n')
