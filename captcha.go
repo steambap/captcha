@@ -1,3 +1,4 @@
+// Package captcha provides a simple API for captcha generation
 package captcha
 
 import (
@@ -20,32 +21,52 @@ const charPreset = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz01234567
 var rng = rand.New(rand.NewSource(time.Now().UnixNano()))
 var ttfFont *truetype.Font
 
+// Options manage captcha generation details.
 type Options struct {
+	// BackgroundColor is captcha image's background color.
+	// It defaults to color.Transparent.
 	BackgroundColor color.Color
-	CharPreset      string
-	TxtLength       int
-	width           int
-	height          int
+	// CharPreset decides what text will be on captcha image.
+	// It defaults to digit 0-9 and all English alphabet.
+	// ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789
+	CharPreset string
+	// TextLength is the length of captcha text.
+	// It defaults to 4.
+	TextLength int
+	// CurveNumber is the number of curves to draw on captcha image.
+	// It defaults to 3.
+	CurveNumber int
+
+	width       int
+	height      int
 }
 
 func newDefaultOption(width, height int) *Options {
 	return &Options{
 		BackgroundColor: color.Transparent,
 		CharPreset:      charPreset,
-		TxtLength:       4,
+		TextLength:      4,
+		CurveNumber:     3,
 		width:           width,
 		height:          height,
 	}
 }
 
+// SetOption is a function that can be used to modify default options.
 type SetOption func(*Options)
 
+// Data is the result of captcha generation.
+// It has a `Text` field and a private `img` field that will
+// be used in `WriteTo` receiver
 type Data struct {
+	// Text is captcha solution
 	Text string
 
 	img *image.NRGBA
 }
 
+// WriteTo encodes image data and writes to an io.Writer.
+// It returns possible error from PNG encoding
 func (data *Data) WriteTo(w io.Writer) error {
 	return png.Encode(w, data.img)
 }
@@ -58,6 +79,8 @@ func init() {
 	}
 }
 
+// New creates a new captcha.
+// It returns captcha data and any freetype drawing error encountered
 func New(width int, height int, option ...SetOption) (*Data, error) {
 	options := newDefaultOption(width, height)
 	for _, setOption := range option {
@@ -68,7 +91,7 @@ func New(width int, height int, option ...SetOption) (*Data, error) {
 	img := image.NewNRGBA(image.Rect(0, 0, width, height))
 	draw.Draw(img, img.Bounds(), &image.Uniform{options.BackgroundColor}, image.ZP, draw.Src)
 	drawNoise(img, options)
-	drawLine(img, options)
+	drawCurves(img, options)
 	err := drawText(text, img, options)
 	if err != nil {
 		return nil, err
@@ -79,7 +102,7 @@ func New(width int, height int, option ...SetOption) (*Data, error) {
 
 func randomText(opts *Options) (text string) {
 	n := len(opts.CharPreset)
-	for i := 0; i < opts.TxtLength; i++ {
+	for i := 0; i < opts.TextLength; i++ {
 		text += string(opts.CharPreset[rng.Intn(n)])
 	}
 
@@ -103,8 +126,8 @@ func randomColor() color.RGBA {
 	return color.RGBA{R: uint8(red), G: uint8(green), B: uint8(blue), A: uint8(255)}
 }
 
-func drawLine(img *image.NRGBA, opts *Options) {
-	for i := 0; i < 3; i++ {
+func drawCurves(img *image.NRGBA, opts *Options) {
+	for i := 0; i < opts.CurveNumber; i++ {
 		drawSineCurve(img, opts)
 	}
 }
