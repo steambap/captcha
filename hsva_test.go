@@ -24,6 +24,13 @@ func TestConversionGray(t *testing.T) {
 	if err := eq(black1, black2); err != nil {
 		t.Fatal(err)
 	}
+
+	var gray1 color.Color = hsva{h: 1.0, s: 0.0, v: 0.8, a: uint8(255)}
+	var gray2 color.Color = color.RGBA{R: uint8(204), G: uint8(204), B: uint8(204), A: uint8(255)}
+
+	if err := eq(gray1, gray2); err != nil {
+		t.Fatal(err)
+	}
 }
 
 func TestConversionRGB(t *testing.T) {
