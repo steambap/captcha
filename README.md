@@ -1,6 +1,6 @@
 > Package captcha provides a simple API for captcha generation
 
-<div align="center">
+<div>
 
 [![GoDoc](https://godoc.org/github.com/steambap/captcha?status.svg)](https://godoc.org/github.com/steambap/captcha)
 [![Build Status](https://travis-ci.org/steambap/captcha.svg)](https://travis-ci.org/steambap/captcha)
