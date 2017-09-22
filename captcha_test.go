@@ -2,6 +2,7 @@ package captcha
 
 import (
 	"bytes"
+	"golang.org/x/image/font/gofont/goregular"
 	"image/color"
 	"testing"
 )
@@ -35,4 +36,16 @@ func TestCovNilFontError(t *testing.T) {
 	}
 
 	ttfFont = temp
+}
+
+func TestLoadFont(t *testing.T) {
+	err := LoadFont(goregular.TTF)
+	if err != nil {
+		t.Fatal("Fail to load go font")
+	}
+
+	err = LoadFont([]byte("invalid"))
+	if err == nil {
+		t.Fatal("LoadFont incorrecly parse an invalid font")
+	}
 }

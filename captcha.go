@@ -78,6 +78,13 @@ func init() {
 	}
 }
 
+// LoadFont let you load an external font
+func LoadFont(fontData []byte) error {
+	var err error
+	ttfFont, err = freetype.ParseFont(fontData)
+	return err
+}
+
 // New creates a new captcha.
 // It returns captcha data and any freetype drawing error encountered
 func New(width int, height int, option ...SetOption) (*Data, error) {
