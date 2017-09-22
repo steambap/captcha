@@ -71,11 +71,7 @@ func (data *Data) WriteTo(w io.Writer) error {
 }
 
 func init() {
-	var err error
-	ttfFont, err = freetype.ParseFont(ttf)
-	if err != nil {
-		panic(err)
-	}
+	ttfFont, _ = freetype.ParseFont(ttf)
 }
 
 // LoadFont let you load an external font

@@ -8,13 +8,19 @@ import (
 )
 
 func TestNewCaptcha(t *testing.T) {
-	New(36, 12)
 	data, err := New(150, 50)
 	if err != nil {
 		t.Fatal(err)
 	}
 	buf := new(bytes.Buffer)
 	data.WriteTo(buf)
+}
+
+func TestSmallCaptcha(t *testing.T) {
+	_, err := New(36, 12)
+	if err != nil {
+		t.Fatal(err)
+	}
 }
 
 func TestNewCaptchaOptions(t *testing.T) {
@@ -46,6 +52,6 @@ func TestLoadFont(t *testing.T) {
 
 	err = LoadFont([]byte("invalid"))
 	if err == nil {
-		t.Fatal("LoadFont incorrecly parse an invalid font")
+		t.Fatal("LoadFont incorrectly parse an invalid font")
 	}
 }
