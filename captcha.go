@@ -12,6 +12,7 @@ import (
 	"io"
 	"math"
 	"math/rand"
+	"strconv"
 	"time"
 )
 
@@ -192,4 +193,64 @@ func drawText(text string, img *image.NRGBA, opts *Options) error {
 	}
 
 	return nil
+}
+
+func randomInvertColor(base color.Color) color.Color {
+	baseLightness := getLightness(base)
+	var value float64
+	if baseLightness >= 0.5 {
+		value = baseLightness - 0.25 - rng.Float64()*0.2
+	} else {
+		value = baseLightness + 0.25 + rng.Float64()*0.2
+	}
+	hue := float64(rng.Intn(361)) / 360
+	saturation := 0.6 + rng.Float64()*0.2
+
+	return hsva{h: hue, s: saturation, v: value, a: uint8(255)}
+}
+
+func getLightness(colour color.Color) float64 {
+	r, g, b, a := colour.RGBA()
+	// transparent
+	if a == 0 {
+		return 1.0
+	}
+	max := maxColor(r, g, b)
+	min := minColor(r, g, b)
+
+	l := (float64(max) + float64(min)) / (2 * 255)
+
+	return l
+}
+
+func maxColor(numList ...uint32) (max uint32) {
+	for _, num := range numList {
+		colorVal := num & 255
+		if colorVal > max {
+			max = colorVal
+		}
+	}
+
+	return max
+}
+
+func minColor(numList ...uint32) (min uint32) {
+	min = 255
+	for _, num := range numList {
+		colorVal := num & 255
+		if colorVal < min {
+			min = colorVal
+		}
+	}
+
+	return min
+}
+
+func randomEquation() (text string, equation string) {
+	left := 1 + rng.Intn(9)
+	right := 1 + rng.Intn(9)
+	text = strconv.Itoa(left + right)
+	equation = strconv.Itoa(left) + "+" + strconv.Itoa(right)
+
+	return text, equation
 }
