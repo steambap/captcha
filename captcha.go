@@ -103,6 +103,27 @@ func New(width int, height int, option ...SetOption) (*Data, error) {
 	return &Data{Text: text, img: img}, nil
 }
 
+// NewMathExpr creates a new captcha.
+// It will generate a image with a math expression like `1 + 2`
+func NewMathExpr(width int, height int, option ...SetOption) (*Data, error) {
+	options := newDefaultOption(width, height)
+	for _, setOption := range option {
+		setOption(options)
+	}
+
+	text, equation := randomEquation()
+	img := image.NewNRGBA(image.Rect(0, 0, width, height))
+	draw.Draw(img, img.Bounds(), &image.Uniform{options.BackgroundColor}, image.ZP, draw.Src)
+	drawNoise(img, options)
+	drawCurves(img, options)
+	err := drawText(equation, img, options)
+	if err != nil {
+		return nil, err
+	}
+
+	return &Data{Text: text, img: img}, nil
+}
+
 func randomText(opts *Options) (text string) {
 	n := len(opts.CharPreset)
 	for i := 0; i < opts.TextLength; i++ {
@@ -183,7 +204,7 @@ func drawText(text string, img *image.NRGBA, opts *Options) error {
 		fontScale := 1 + rng.Float64()*0.5
 		fontSize := float64(opts.height) / fontScale
 		ctx.SetFontSize(fontSize)
-		ctx.SetSrc(image.NewUniform(randomDarkColor()))
+		ctx.SetSrc(image.NewUniform(randomInvertColor(opts.BackgroundColor)))
 		x := fontSpacing*idx + fontSpacing/int(fontSize)
 		y := opts.height/6 + rng.Intn(opts.height/3) + int(fontSize/2)
 		pt := freetype.Pt(x, y)

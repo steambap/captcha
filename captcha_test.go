@@ -4,8 +4,8 @@ import (
 	"bytes"
 	"golang.org/x/image/font/gofont/goregular"
 	"image/color"
-	"testing"
 	"math/rand"
+	"testing"
 )
 
 func TestNewCaptcha(t *testing.T) {
@@ -31,6 +31,17 @@ func TestNewCaptchaOptions(t *testing.T) {
 		options.CurveNumber = 0
 		options.TextLength = 6
 	})
+
+	NewMathExpr(100, 34, func(options *Options) {
+		options.BackgroundColor = color.Black
+	})
+}
+
+func TestNewMathExpr(t *testing.T) {
+	_, err := NewMathExpr(150, 50)
+	if err != nil {
+		t.Fatal(err)
+	}
 }
 
 func TestCovNilFontError(t *testing.T) {
@@ -38,6 +49,11 @@ func TestCovNilFontError(t *testing.T) {
 	ttfFont = nil
 
 	_, err := New(150, 50)
+	if err == nil {
+		t.Fatal("Expect to get nil font error")
+	}
+
+	_, err = NewMathExpr(150, 50)
 	if err == nil {
 		t.Fatal("Expect to get nil font error")
 	}
