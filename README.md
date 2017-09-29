@@ -35,6 +35,8 @@ func handle(w http.ResponseWriter, r *http.Request) {
 ## sample image
 ![image](example/captcha.png)
 
+![image](example/captcha-math.png)
+
 ## Contributing
 If your found a bug, please contribute!
 see [contributing.md](contributing.md) for more detail

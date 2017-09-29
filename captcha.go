@@ -174,20 +174,12 @@ func drawSineCurve(img *image.NRGBA, opts *Options) {
 	if flip {
 		yFlip = -1.0
 	}
-	curveColor := randomDarkColor()
+	curveColor := randomInvertColor(opts.BackgroundColor)
 
 	for x1 := xStart; x1 <= xEnd; x1++ {
 		y := math.Sin(math.Pi*angle*float64(x1)/float64(opts.width)) * curveHeight * yFlip
 		img.Set(x1, int(y)+yStart, curveColor)
 	}
-}
-
-func randomDarkColor() hsva {
-	hue := float64(rng.Intn(361)) / 360
-	saturation := 0.6 + rng.Float64()*0.2
-	value := 0.25 + rng.Float64()*0.2
-
-	return hsva{h: hue, s: saturation, v: value, a: uint8(255)}
 }
 
 func drawText(text string, img *image.NRGBA, opts *Options) error {
@@ -199,13 +191,14 @@ func drawText(text string, img *image.NRGBA, opts *Options) error {
 	ctx.SetFont(ttfFont)
 
 	fontSpacing := opts.width / len(text)
+	fontOffset := rng.Intn(fontSpacing / 2)
 
 	for idx, char := range text {
 		fontScale := 1 + rng.Float64()*0.5
 		fontSize := float64(opts.height) / fontScale
 		ctx.SetFontSize(fontSize)
 		ctx.SetSrc(image.NewUniform(randomInvertColor(opts.BackgroundColor)))
-		x := fontSpacing*idx + fontSpacing/int(fontSize)
+		x := fontSpacing*idx + fontOffset
 		y := opts.height/6 + rng.Intn(opts.height/3) + int(fontSize/2)
 		pt := freetype.Pt(x, y)
 		if _, err := ctx.DrawString(string(char), pt); err != nil {
@@ -220,9 +213,9 @@ func randomInvertColor(base color.Color) color.Color {
 	baseLightness := getLightness(base)
 	var value float64
 	if baseLightness >= 0.5 {
-		value = baseLightness - 0.25 - rng.Float64()*0.2
+		value = baseLightness - 0.3 - rng.Float64()*0.2
 	} else {
-		value = baseLightness + 0.25 + rng.Float64()*0.2
+		value = baseLightness + 0.3 + rng.Float64()*0.2
 	}
 	hue := float64(rng.Intn(361)) / 360
 	saturation := 0.6 + rng.Float64()*0.2
