@@ -1,4 +1,4 @@
-// Package captcha provides a simple API for captcha generation
+// Package captcha provides an easy to use, unopinionated API for captcha generation
 package captcha
 
 import (

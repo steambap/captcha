@@ -1,4 +1,4 @@
-> Package captcha provides a simple API for captcha generation
+> Package captcha provides an easy to use, unopinionated API for captcha generation
 
 <div>
 
@@ -8,6 +8,9 @@
 [![Go Report Card](https://goreportcard.com/badge/github.com/steambap/captcha)](https://goreportcard.com/report/github.com/steambap/captcha)
 
 </div>
+
+## Why another captcha generator?
+I want a simple and framework-independent way to generate captcha. It also should be flexible, at least allow me to pick my favorite font.
 
 ## install
 ```
