@@ -33,7 +33,7 @@ func handle(w http.ResponseWriter, r *http.Request) {
 ```
 
 [documentation](https://godoc.org/github.com/steambap/captcha) |
-[example](example/main.go)
+[example](example/basic/main.go)
 
 ## sample image
 ![image](example/captcha.png)

@@ -36,6 +36,9 @@ type Options struct {
 	// CurveNumber is the number of curves to draw on captcha image.
 	// It defaults to 2.
 	CurveNumber int
+	// FontDPI controls scale of font.
+	// The default is 92.0.
+	FontDPI float64
 
 	width  int
 	height int
@@ -47,6 +50,7 @@ func newDefaultOption(width, height int) *Options {
 		CharPreset:      charPreset,
 		TextLength:      4,
 		CurveNumber:     2,
+		FontDPI:         92.0,
 		width:           width,
 		height:          height,
 	}
@@ -184,7 +188,7 @@ func drawSineCurve(img *image.NRGBA, opts *Options) {
 
 func drawText(text string, img *image.NRGBA, opts *Options) error {
 	ctx := freetype.NewContext()
-	ctx.SetDPI(92.0)
+	ctx.SetDPI(opts.FontDPI)
 	ctx.SetClip(img.Bounds())
 	ctx.SetDst(img)
 	ctx.SetHinting(font.HintingFull)
