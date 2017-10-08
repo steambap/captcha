@@ -34,7 +34,7 @@ func indexHandle(w http.ResponseWriter, _ *http.Request) {
 
 func captchaHandle(w http.ResponseWriter, _ *http.Request) {
 	img, err := captcha.New(150, 50, func(options *captcha.Options) {
-		options.FontDPI = 72.0
+		options.FontScale = 0.8
 	})
 	if err != nil {
 		fmt.Fprint(w, nil)
