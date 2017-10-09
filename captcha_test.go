@@ -14,7 +14,7 @@ func TestNewCaptcha(t *testing.T) {
 		t.Fatal(err)
 	}
 	buf := new(bytes.Buffer)
-	data.WriteTo(buf)
+	data.WriteImage(buf)
 }
 
 func TestSmallCaptcha(t *testing.T) {

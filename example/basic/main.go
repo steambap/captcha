@@ -34,7 +34,7 @@ func captchaHandle(w http.ResponseWriter, _ *http.Request) {
 		fmt.Println(err.Error())
 		return
 	}
-	img.WriteTo(w)
+	img.WriteImage(w)
 }
 
 func mathHandle(w http.ResponseWriter, _ *http.Request) {
@@ -44,5 +44,5 @@ func mathHandle(w http.ResponseWriter, _ *http.Request) {
 		fmt.Println(err.Error())
 		return
 	}
-	img.WriteTo(w)
+	img.WriteImage(w)
 }

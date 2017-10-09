@@ -65,7 +65,7 @@ type SetOption func(*Options)
 
 // Data is the result of captcha generation.
 // It has a `Text` field and a private `img` field that will
-// be used in `WriteTo` receiver
+// be used in `WriteImage` receiver
 type Data struct {
 	// Text is captcha solution
 	Text string
@@ -73,9 +73,9 @@ type Data struct {
 	img *image.NRGBA
 }
 
-// WriteTo encodes image data and writes to an io.Writer.
+// WriteImage encodes image data and writes to an io.Writer.
 // It returns possible error from PNG encoding
-func (data *Data) WriteTo(w io.Writer) error {
+func (data *Data) WriteImage(w io.Writer) error {
 	return png.Encode(w, data.img)
 }
 

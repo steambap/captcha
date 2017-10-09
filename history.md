@@ -1,3 +1,7 @@
+0.12.0 / 2017-10-07
+===================
+* Add FontDPI and FontScale options
+
 0.11.0 / 2017-09-28
 ===================
 * Add NewMathExpr API
