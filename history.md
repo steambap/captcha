@@ -1,3 +1,9 @@
+1.0.0 / 2017-10-10
+===================
+
+* Add LoadFontFromReader API
+* Rename WriteTo to WriteImage
+
 0.12.0 / 2017-10-07
 ===================
 
