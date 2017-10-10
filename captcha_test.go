@@ -5,6 +5,7 @@ import (
 	"golang.org/x/image/font/gofont/goregular"
 	"image/color"
 	"math/rand"
+	"os"
 	"testing"
 )
 
@@ -70,6 +71,17 @@ func TestLoadFont(t *testing.T) {
 	err = LoadFont([]byte("invalid"))
 	if err == nil {
 		t.Fatal("LoadFont incorrectly parse an invalid font")
+	}
+}
+
+func TestLoadFontFromReader(t *testing.T) {
+	file, err := os.Open("./fonts/Comismsh.ttf")
+	if err != nil {
+		t.Fatal("Fail to load test file")
+	}
+
+	if err = LoadFontFromReader(file); err != nil {
+		t.Fatal("Fail to load font from io.Reader")
 	}
 }
 

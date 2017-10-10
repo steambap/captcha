@@ -2,6 +2,7 @@
 package captcha
 
 import (
+	"bytes"
 	"github.com/golang/freetype"
 	"github.com/golang/freetype/truetype"
 	"golang.org/x/image/font"
@@ -83,11 +84,21 @@ func init() {
 	ttfFont, _ = freetype.ParseFont(ttf)
 }
 
-// LoadFont let you load an external font
+// LoadFont let you load an external font.
 func LoadFont(fontData []byte) error {
 	var err error
 	ttfFont, err = freetype.ParseFont(fontData)
 	return err
+}
+
+// LoadFontFromReader load an external font from an io.Reader interface.
+func LoadFontFromReader(reader io.Reader) error {
+	var buf bytes.Buffer
+	if _, err := io.Copy(&buf, reader); err != nil {
+		return err
+	}
+
+	return LoadFont(buf.Bytes())
 }
 
 // New creates a new captcha.

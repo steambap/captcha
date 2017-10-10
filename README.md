@@ -27,7 +27,7 @@ func handle(w http.ResponseWriter, r *http.Request) {
 	session.Values["captcha"] = data.Text
 	session.Save(r, w)
 	// send image data to client
-	data.WriteTo(w)
+	data.WriteImage(w)
 }
 
 ```
