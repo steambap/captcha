@@ -7,6 +7,7 @@ import (
 	"math/rand"
 	"os"
 	"testing"
+	"errors"
 )
 
 func TestNewCaptcha(t *testing.T) {
@@ -60,6 +61,18 @@ func TestCovNilFontError(t *testing.T) {
 	}
 
 	ttfFont = temp
+}
+
+type errReader struct {}
+func (errReader) Read(_ []byte) (int, error) {
+	return 0, errors.New("")
+}
+
+func TestCovReaderErr(t *testing.T) {
+	err := LoadFontFromReader(errReader{})
+	if err == nil {
+		t.Fatal("Expect to get io.Reader error")
+	}
 }
 
 func TestLoadFont(t *testing.T) {
