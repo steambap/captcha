@@ -8,6 +8,7 @@ import (
 	"os"
 	"testing"
 	"errors"
+	"image/jpeg"
 )
 
 func TestNewCaptcha(t *testing.T) {
@@ -24,6 +25,15 @@ func TestSmallCaptcha(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
+}
+
+func TestEncodeJPG(t *testing.T) {
+	data, err := New(150, 50)
+	if err != nil {
+		t.Fatal(err)
+	}
+	buf := new(bytes.Buffer)
+	data.WriteJPG(buf, &jpeg.Options{70})
 }
 
 func TestNewCaptchaOptions(t *testing.T) {
