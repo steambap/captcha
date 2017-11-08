@@ -2,13 +2,14 @@ package captcha
 
 import (
 	"bytes"
+	"errors"
 	"golang.org/x/image/font/gofont/goregular"
 	"image/color"
+	"image/gif"
+	"image/jpeg"
 	"math/rand"
 	"os"
 	"testing"
-	"errors"
-	"image/jpeg"
 )
 
 func TestNewCaptcha(t *testing.T) {
@@ -17,7 +18,10 @@ func TestNewCaptcha(t *testing.T) {
 		t.Fatal(err)
 	}
 	buf := new(bytes.Buffer)
-	data.WriteImage(buf)
+	err = data.WriteImage(buf)
+	if err != nil {
+		t.Fatal(err)
+	}
 }
 
 func TestSmallCaptcha(t *testing.T) {
@@ -33,7 +37,22 @@ func TestEncodeJPG(t *testing.T) {
 		t.Fatal(err)
 	}
 	buf := new(bytes.Buffer)
-	data.WriteJPG(buf, &jpeg.Options{70})
+	err = data.WriteJPG(buf, &jpeg.Options{Quality: 70})
+	if err != nil {
+		t.Fatal(err)
+	}
+}
+
+func TestEncodeGIF(t *testing.T) {
+	data, err := New(150, 50)
+	if err != nil {
+		t.Fatal(err)
+	}
+	buf := new(bytes.Buffer)
+	err = data.WriteGIF(buf, &gif.Options{})
+	if err != nil {
+		t.Fatal(err)
+	}
 }
 
 func TestNewCaptchaOptions(t *testing.T) {
@@ -73,7 +92,8 @@ func TestCovNilFontError(t *testing.T) {
 	ttfFont = temp
 }
 
-type errReader struct {}
+type errReader struct{}
+
 func (errReader) Read(_ []byte) (int, error) {
 	return 0, errors.New("")
 }

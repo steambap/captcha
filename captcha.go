@@ -9,13 +9,14 @@ import (
 	"image"
 	"image/color"
 	"image/draw"
+	"image/gif"
+	"image/jpeg"
 	"image/png"
 	"io"
 	"math"
 	"math/rand"
 	"strconv"
 	"time"
-	"image/jpeg"
 )
 
 const charPreset = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"
@@ -76,15 +77,21 @@ type Data struct {
 }
 
 // WriteImage encodes image data and writes to an io.Writer.
-// It returns possible error from PNG encoding
+// It returns possible error from PNG encoding.
 func (data *Data) WriteImage(w io.Writer) error {
 	return png.Encode(w, data.img)
 }
 
 // WriteJPG encodes image data in JPEG format and writes to an io.Writer.
-// It returns possible error from JPEG encoding
+// It returns possible error from JPEG encoding.
 func (data *Data) WriteJPG(w io.Writer, o *jpeg.Options) error {
 	return jpeg.Encode(w, data.img, o)
+}
+
+// WriteGIF encodes image data in GIF format and writes to an io.Writer.
+// It returns possible error from GIF encoding.
+func (data *Data) WriteGIF(w io.Writer, o *gif.Options) error {
+	return gif.Encode(w, data.img, o)
 }
 
 func init() {
