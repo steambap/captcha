@@ -3,13 +3,14 @@ package captcha
 import (
 	"bytes"
 	"errors"
-	"golang.org/x/image/font/gofont/goregular"
 	"image/color"
 	"image/gif"
 	"image/jpeg"
 	"math/rand"
 	"os"
 	"testing"
+
+	"golang.org/x/image/font/gofont/goregular"
 )
 
 func TestNewCaptcha(t *testing.T) {

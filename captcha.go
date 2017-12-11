@@ -3,9 +3,6 @@ package captcha
 
 import (
 	"bytes"
-	"github.com/golang/freetype"
-	"github.com/golang/freetype/truetype"
-	"golang.org/x/image/font"
 	"image"
 	"image/color"
 	"image/draw"
@@ -17,6 +14,10 @@ import (
 	"math/rand"
 	"strconv"
 	"time"
+
+	"github.com/golang/freetype"
+	"github.com/golang/freetype/truetype"
+	"golang.org/x/image/font"
 )
 
 const charPreset = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"
@@ -45,6 +46,10 @@ type Options struct {
 	// FontScale controls the scale of font.
 	// The default is 1.0.
 	FontScale float64
+	// Noise controls the number of noise drawn.
+	// A noise dot is drawn for every 28 pixel by default.
+	// The default is 1.0.
+	Noise float64
 
 	width  int
 	height int
@@ -58,6 +63,7 @@ func newDefaultOption(width, height int) *Options {
 		CurveNumber:     2,
 		FontDPI:         72.0,
 		FontScale:       1.0,
+		Noise:           1.0,
 		width:           width,
 		height:          height,
 	}
@@ -167,7 +173,7 @@ func randomText(opts *Options) (text string) {
 }
 
 func drawNoise(img *image.NRGBA, opts *Options) {
-	noiseCount := (opts.width * opts.height) / 28
+	noiseCount := (opts.width * opts.height) / int(28.0/opts.Noise)
 	for i := 0; i < noiseCount; i++ {
 		x := rng.Intn(opts.width)
 		y := rng.Intn(opts.height)
