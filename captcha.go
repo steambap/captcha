@@ -74,9 +74,9 @@ type SetOption func(*Options)
 
 // Data is the result of captcha generation.
 // It has a `Text` field and a private `img` field that will
-// be used in `WriteImage` receiver
+// be used in `WriteImage` receiver.
 type Data struct {
-	// Text is captcha solution
+	// Text is captcha solution.
 	Text string
 
 	img *image.NRGBA
@@ -122,7 +122,7 @@ func LoadFontFromReader(reader io.Reader) error {
 }
 
 // New creates a new captcha.
-// It returns captcha data and any freetype drawing error encountered
+// It returns captcha data and any freetype drawing error encountered.
 func New(width int, height int, option ...SetOption) (*Data, error) {
 	options := newDefaultOption(width, height)
 	for _, setOption := range option {
@@ -143,7 +143,7 @@ func New(width int, height int, option ...SetOption) (*Data, error) {
 }
 
 // NewMathExpr creates a new captcha.
-// It will generate a image with a math expression like `1 + 2`
+// It will generate a image with a math expression like `1 + 2`.
 func NewMathExpr(width int, height int, option ...SetOption) (*Data, error) {
 	options := newDefaultOption(width, height)
 	for _, setOption := range option {

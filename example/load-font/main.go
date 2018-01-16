@@ -2,10 +2,11 @@ package main
 
 import (
 	"fmt"
-	"github.com/steambap/captcha"
-	"golang.org/x/image/font/gofont/goregular"
 	"html/template"
 	"net/http"
+
+	"github.com/steambap/captcha"
+	"golang.org/x/image/font/gofont/goregular"
 )
 
 func main() {

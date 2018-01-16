@@ -2,9 +2,10 @@ package main
 
 import (
 	"fmt"
-	"github.com/steambap/captcha"
 	"html/template"
 	"net/http"
+
+	"github.com/steambap/captcha"
 )
 
 func main() {
