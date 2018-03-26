@@ -208,9 +208,8 @@ func drawSineCurve(img *image.NRGBA, opts *Options) {
 	curveHeight := float64(rng.Intn(opts.height/6) + opts.height/6)
 	yStart := rng.Intn(opts.height*2/3) + opts.height/6
 	angle := 1.0 + rng.Float64()
-	flip := rng.Intn(2) == 0
 	yFlip := 1.0
-	if flip {
+	if rng.Intn(2) == 0 {
 		yFlip = -1.0
 	}
 	curveColor := randomInvertColor(opts.BackgroundColor)
