@@ -258,7 +258,7 @@ func randomInvertColor(base color.Color) color.Color {
 	hue := float64(rng.Intn(361)) / 360
 	saturation := 0.6 + rng.Float64()*0.2
 
-	return hsva{h: hue, s: saturation, v: value, a: uint8(255)}
+	return hsva{h: hue, s: saturation, v: value, a: 255}
 }
 
 func getLightness(colour color.Color) float64 {

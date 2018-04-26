@@ -1,4 +1,4 @@
-> Package captcha provides an easy to use, unopinionated API for captcha generation
+> Package captcha provides an easy to use, unopinionated API for captcha generation.
 
 <div>
 
@@ -42,7 +42,7 @@ func handle(w http.ResponseWriter, r *http.Request) {
 
 ## Contributing
 If your found a bug, please contribute!
-see [contributing.md](contributing.md) for more detail
+see [contributing.md](contributing.md) for more detail.
 
 ## License
 [MIT](LICENSE.md)
