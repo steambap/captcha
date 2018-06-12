@@ -182,9 +182,9 @@ func drawNoise(img *image.NRGBA, opts *Options) {
 }
 
 func randomColor() color.RGBA {
-	red := rng.Intn(255)
-	green := rng.Intn(255)
-	blue := rng.Intn(255)
+	red := rng.Intn(256)
+	green := rng.Intn(256)
+	blue := rng.Intn(256)
 
 	return color.RGBA{R: uint8(red), G: uint8(green), B: uint8(blue), A: uint8(255)}
 }
