@@ -50,6 +50,8 @@ type Options struct {
 	// A noise dot is drawn for every 28 pixel by default.
 	// The default is 1.0.
 	Noise float64
+	// Palette is the set of colors to chose from
+	Palette color.Palette
 
 	width  int
 	height int
@@ -64,6 +66,7 @@ func newDefaultOption(width, height int) *Options {
 		FontDPI:         72.0,
 		FontScale:       1.0,
 		Noise:           1.0,
+		Palette:         []color.Color{},
 		width:           width,
 		height:          height,
 	}
@@ -212,7 +215,7 @@ func drawSineCurve(img *image.NRGBA, opts *Options) {
 	if rng.Intn(2) == 0 {
 		yFlip = -1.0
 	}
-	curveColor := randomInvertColor(opts.BackgroundColor)
+	curveColor := randomColorFromOptions(opts)
 
 	for x1 := xStart; x1 <= xEnd; x1++ {
 		y := math.Sin(math.Pi*angle*float64(x1)/float64(opts.width)) * curveHeight * yFlip
@@ -235,7 +238,7 @@ func drawText(text string, img *image.NRGBA, opts *Options) error {
 		fontScale := 0.8 + rng.Float64()*0.4
 		fontSize := float64(opts.height) / fontScale * opts.FontScale
 		ctx.SetFontSize(fontSize)
-		ctx.SetSrc(image.NewUniform(randomInvertColor(opts.BackgroundColor)))
+		ctx.SetSrc(image.NewUniform(randomColorFromOptions(opts)))
 		x := fontSpacing*idx + fontOffset
 		y := opts.height/6 + rng.Intn(opts.height/3) + int(fontSize/2)
 		pt := freetype.Pt(x, y)
@@ -245,6 +248,15 @@ func drawText(text string, img *image.NRGBA, opts *Options) error {
 	}
 
 	return nil
+}
+
+func randomColorFromOptions(opts *Options) color.Color {
+	length := len(opts.Palette)
+	if length == 0 {
+		return randomInvertColor(opts.BackgroundColor)
+	}
+
+	return opts.Palette[rng.Intn(length)]
 }
 
 func randomInvertColor(base color.Color) color.Color {
