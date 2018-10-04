@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"errors"
 	"image/color"
+	"image/color/palette"
 	"image/gif"
 	"image/jpeg"
 	"math/rand"
@@ -62,6 +63,7 @@ func TestNewCaptchaOptions(t *testing.T) {
 		options.CharPreset = "1234567890"
 		options.CurveNumber = 0
 		options.TextLength = 6
+		options.Palette = palette.WebSafe
 	})
 
 	NewMathExpr(100, 34, func(options *Options) {
