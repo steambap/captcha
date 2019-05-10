@@ -33,6 +33,24 @@ func TestSmallCaptcha(t *testing.T) {
 	}
 }
 
+func TestEncode(t *testing.T) {
+	data, err := New(150, 50)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	buf := new(bytes.Buffer)
+	err = data.WriteImage(buf)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	_, err = data.GetBase64Image()
+	if err != nil {
+		t.Fatal(err)
+	}
+}
+
 func TestEncodeJPG(t *testing.T) {
 	data, err := New(150, 50)
 	if err != nil {
@@ -40,6 +58,11 @@ func TestEncodeJPG(t *testing.T) {
 	}
 	buf := new(bytes.Buffer)
 	err = data.WriteJPG(buf, &jpeg.Options{Quality: 70})
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	_, err = data.GetBase64JPG(&jpeg.Options{Quality: 70})
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -52,6 +75,11 @@ func TestEncodeGIF(t *testing.T) {
 	}
 	buf := new(bytes.Buffer)
 	err = data.WriteGIF(buf, &gif.Options{})
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	_, err = data.GetBase64GIF(new(gif.Options))
 	if err != nil {
 		t.Fatal(err)
 	}

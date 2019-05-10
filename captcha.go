@@ -3,6 +3,7 @@ package captcha
 
 import (
 	"bytes"
+	"encoding/base64"
 	"image"
 	"image/color"
 	"image/draw"
@@ -91,16 +92,55 @@ func (data *Data) WriteImage(w io.Writer) error {
 	return png.Encode(w, data.img)
 }
 
+// GetBase64Image encodes image data as base64 string.
+// It returns base64 encoded PNG and possible encoding error.
+func (data *Data) GetBase64Image() (string, error) {
+	var buff bytes.Buffer
+
+	err := png.Encode(&buff, data.img)
+	if err != nil {
+		return "", err
+	}
+
+	return base64.StdEncoding.EncodeToString(buff.Bytes()), nil
+}
+
 // WriteJPG encodes image data in JPEG format and writes to an io.Writer.
 // It returns possible error from JPEG encoding.
 func (data *Data) WriteJPG(w io.Writer, o *jpeg.Options) error {
 	return jpeg.Encode(w, data.img, o)
 }
 
+// GetBase64JPG encodes image data as base64 string.
+// It returns base64 encoded JPG and possible encoding error.
+func (data *Data) GetBase64JPG(o *jpeg.Options) (string, error) {
+	var buff bytes.Buffer
+
+	err := jpeg.Encode(&buff, data.img, o)
+	if err != nil {
+		return "", err
+	}
+
+	return base64.StdEncoding.EncodeToString(buff.Bytes()), nil
+}
+
 // WriteGIF encodes image data in GIF format and writes to an io.Writer.
 // It returns possible error from GIF encoding.
 func (data *Data) WriteGIF(w io.Writer, o *gif.Options) error {
 	return gif.Encode(w, data.img, o)
+}
+
+// GetBase64GIF encodes image data as base64 string.
+// It returns base64 encoded GIF and possible encoding error.
+func (data *Data) GetBase64GIF(o *gif.Options) (string, error) {
+	var buff bytes.Buffer
+
+	err := gif.Encode(&buff, data.img, o)
+	if err != nil {
+		return "", err
+	}
+
+	return base64.StdEncoding.EncodeToString(buff.Bytes()), nil
 }
 
 func init() {
