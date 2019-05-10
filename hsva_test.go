@@ -6,7 +6,7 @@ import (
 	"testing"
 )
 
-func TestHSVAInterface(t *testing.T) {
+func TestHSVAInterface(_ *testing.T) {
 	var _ color.Color = hsva{}
 }
 

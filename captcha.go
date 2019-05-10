@@ -22,8 +22,11 @@ import (
 
 const charPreset = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"
 
-var rng = rand.New(rand.NewSource(time.Now().UnixNano()))
-var ttfFont *truetype.Font
+// nolint: gochecknoglobals
+var (
+	rng     = rand.New(rand.NewSource(time.Now().UnixNano()))
+	ttfFont *truetype.Font
+)
 
 // Options manage captcha generation details.
 type Options struct {
@@ -103,6 +106,7 @@ func (data *Data) WriteGIF(w io.Writer, o *gif.Options) error {
 	return gif.Encode(w, data.img, o)
 }
 
+// nolint: gochecknoinits
 func init() {
 	ttfFont, _ = freetype.ParseFont(ttf)
 }
@@ -223,7 +227,7 @@ func drawSineCurve(img *image.NRGBA, opts *Options) {
 	}
 }
 
-func drawText(text string, img *image.NRGBA, opts *Options) error {
+func drawText(text string, img *image.NRGBA, opts *Options) error { // nolint: interfacer
 	ctx := freetype.NewContext()
 	ctx.SetDPI(opts.FontDPI)
 	ctx.SetClip(img.Bounds())
