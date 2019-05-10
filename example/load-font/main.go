@@ -17,6 +17,7 @@ func main() {
 
 	http.HandleFunc("/", indexHandle)
 	http.HandleFunc("/captcha", captchaHandle)
+
 	fmt.Println("Server start at port 8080")
 	err = http.ListenAndServe(":8080", nil)
 	if err != nil {
@@ -28,9 +29,16 @@ func indexHandle(w http.ResponseWriter, _ *http.Request) {
 	doc, err := template.ParseFiles("index.html")
 	if err != nil {
 		fmt.Fprint(w, err.Error())
+
 		return
 	}
-	doc.Execute(w, nil)
+
+	err = doc.Execute(w, nil)
+	if err != nil {
+		fmt.Println(err.Error())
+
+		return
+	}
 }
 
 func captchaHandle(w http.ResponseWriter, _ *http.Request) {
@@ -40,7 +48,14 @@ func captchaHandle(w http.ResponseWriter, _ *http.Request) {
 	if err != nil {
 		fmt.Fprint(w, nil)
 		fmt.Println(err.Error())
+
 		return
 	}
-	img.WriteImage(w)
+
+	err = img.WriteImage(w)
+	if err != nil {
+		fmt.Println(err.Error())
+
+		return
+	}
 }

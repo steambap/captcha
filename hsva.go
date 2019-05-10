@@ -39,5 +39,6 @@ func (c hsva) RGBA() (r, g, b, a uint32) {
 	b |= b << 8
 	a = uint32(c.a)
 	a |= a << 8
-	return
+
+	return r, g, b, a
 }
