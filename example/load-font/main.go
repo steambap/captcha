@@ -7,10 +7,15 @@ import (
 
 	"github.com/steambap/captcha"
 	"golang.org/x/image/font/gofont/goregular"
+	"github.com/golang/freetype/truetype"
 )
 
+var ttf *truetype.Font
+
 func main() {
-	err := captcha.LoadFont(goregular.TTF)
+	var err error
+
+	ttf, err = captcha.LoadFont(goregular.TTF)
 	if err != nil {
 		panic(err)
 	}
@@ -44,6 +49,7 @@ func indexHandle(w http.ResponseWriter, _ *http.Request) {
 func captchaHandle(w http.ResponseWriter, _ *http.Request) {
 	img, err := captcha.New(150, 50, func(options *captcha.Options) {
 		options.FontScale = 0.8
+		options.TTFFont = ttf
 	})
 	if err != nil {
 		fmt.Fprint(w, nil)

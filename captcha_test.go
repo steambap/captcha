@@ -87,21 +87,10 @@ func TestNewMathExpr(t *testing.T) {
 	}
 }
 
-func TestCovNilFontError(t *testing.T) {
-	temp := ttfFont
-	ttfFont = nil
-
-	_, err := New(150, 50)
-	if err == nil {
-		t.Fatal("Expect to get nil font error")
+func TestCovInternalFontErr(t *testing.T) {
+	if ttfFont := MustLoadFont(ttf); ttfFont == nil {
+		t.Fatal("Fail to load internal font")
 	}
-
-	_, err = NewMathExpr(150, 50)
-	if err == nil {
-		t.Fatal("Expect to get nil font error")
-	}
-
-	ttfFont = temp
 }
 
 type errReader struct{}
@@ -111,20 +100,18 @@ func (errReader) Read(_ []byte) (int, error) {
 }
 
 func TestCovReaderErr(t *testing.T) {
-	err := LoadFontFromReader(errReader{})
+	_, err := LoadFontFromReader(errReader{})
 	if err == nil {
 		t.Fatal("Expect to get io.Reader error")
 	}
 }
 
 func TestLoadFont(t *testing.T) {
-	err := LoadFont(goregular.TTF)
-	if err != nil {
+	if _, err := LoadFont(goregular.TTF); err != nil {
 		t.Fatal("Fail to load go font")
 	}
 
-	err = LoadFont([]byte("invalid"))
-	if err == nil {
+	if _, err := LoadFont([]byte("invalid")); err == nil {
 		t.Fatal("LoadFont incorrectly parse an invalid font")
 	}
 }
@@ -135,7 +122,7 @@ func TestLoadFontFromReader(t *testing.T) {
 		t.Fatal("Fail to load test file")
 	}
 
-	if err = LoadFontFromReader(file); err != nil {
+	if _, err := LoadFontFromReader(file); err != nil {
 		t.Fatal("Fail to load font from io.Reader")
 	}
 }

@@ -22,10 +22,6 @@ import (
 
 const charPreset = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"
 
-var (
-	ttfFont *truetype.Font
-)
-
 // Options manage captcha generation details.
 type Options struct {
 	// BackgroundColor is captcha image's background color.
@@ -53,6 +49,8 @@ type Options struct {
 	Noise float64
 	// Palette is the set of colors to chose from
 	Palette color.Palette
+	// TTFFont defines font to use for captcha text.
+	TTFFont *truetype.Font
 
 	width  int
 	height int
@@ -79,6 +77,8 @@ func newDefaultOption(width, height int) *Options {
 				time.Now().UnixNano(),
 			),
 		),
+
+		TTFFont: MustLoadFont(ttf),
 	}
 }
 
@@ -113,23 +113,27 @@ func (data *Data) WriteGIF(w io.Writer, o *gif.Options) error {
 	return gif.Encode(w, data.img, o)
 }
 
-// nolint: gochecknoinits
-func init() {
-	ttfFont, _ = freetype.ParseFont(ttf)
+// LoadFont let you load an external font.
+func LoadFont(fontData []byte) (*truetype.Font, error) {
+	return freetype.ParseFont(fontData)
 }
 
-// LoadFont let you load an external font.
-func LoadFont(fontData []byte) error {
-	var err error
-	ttfFont, err = freetype.ParseFont(fontData)
-	return err
+// MustLoadFont let you load an external font.
+// Function assumes that font is valid.
+func MustLoadFont(fontData []byte) *truetype.Font {
+	ttfFont, err := LoadFont(fontData)
+	if err != nil {
+		return nil
+	}
+
+	return ttfFont
 }
 
 // LoadFontFromReader load an external font from an io.Reader interface.
-func LoadFontFromReader(reader io.Reader) error {
+func LoadFontFromReader(reader io.Reader) (*truetype.Font, error) {
 	var buf bytes.Buffer
 	if _, err := io.Copy(&buf, reader); err != nil {
-		return err
+		return nil, err
 	}
 
 	return LoadFont(buf.Bytes())
@@ -240,7 +244,7 @@ func drawText(text string, img *image.NRGBA, opts *Options) error { // nolint: i
 	ctx.SetClip(img.Bounds())
 	ctx.SetDst(img)
 	ctx.SetHinting(font.HintingFull)
-	ctx.SetFont(ttfFont)
+	ctx.SetFont(opts.TTFFont)
 
 	fontSpacing := opts.width / len(text)
 	fontOffset := opts.rng.Intn(fontSpacing / 2)
