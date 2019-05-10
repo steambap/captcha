@@ -22,9 +22,7 @@ import (
 
 const charPreset = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"
 
-// nolint: gochecknoglobals
 var (
-	rng     = rand.New(rand.NewSource(time.Now().UnixNano()))
 	ttfFont *truetype.Font
 )
 
@@ -58,6 +56,8 @@ type Options struct {
 
 	width  int
 	height int
+
+	rng *rand.Rand
 }
 
 func newDefaultOption(width, height int) *Options {
@@ -70,8 +70,15 @@ func newDefaultOption(width, height int) *Options {
 		FontScale:       1.0,
 		Noise:           1.0,
 		Palette:         []color.Color{},
-		width:           width,
-		height:          height,
+
+		width:  width,
+		height: height,
+
+		rng: rand.New(
+			rand.NewSource(
+				time.Now().UnixNano(),
+			),
+		),
 	}
 }
 
@@ -157,7 +164,7 @@ func NewMathExpr(width int, height int, option ...SetOption) (*Data, error) {
 		setOption(options)
 	}
 
-	text, equation := randomEquation()
+	text, equation := randomEquation(options.rng)
 	img := image.NewNRGBA(image.Rect(0, 0, width, height))
 	draw.Draw(img, img.Bounds(), &image.Uniform{options.BackgroundColor}, image.ZP, draw.Src)
 	drawNoise(img, options)
@@ -173,7 +180,7 @@ func NewMathExpr(width int, height int, option ...SetOption) (*Data, error) {
 func randomText(opts *Options) (text string) {
 	n := len(opts.CharPreset)
 	for i := 0; i < opts.TextLength; i++ {
-		text += string(opts.CharPreset[rng.Intn(n)])
+		text += string(opts.CharPreset[opts.rng.Intn(n)])
 	}
 
 	return text
@@ -182,13 +189,13 @@ func randomText(opts *Options) (text string) {
 func drawNoise(img *image.NRGBA, opts *Options) {
 	noiseCount := (opts.width * opts.height) / int(28.0/opts.Noise)
 	for i := 0; i < noiseCount; i++ {
-		x := rng.Intn(opts.width)
-		y := rng.Intn(opts.height)
-		img.Set(x, y, randomColor())
+		x := opts.rng.Intn(opts.width)
+		y := opts.rng.Intn(opts.height)
+		img.Set(x, y, randomColor(opts.rng))
 	}
 }
 
-func randomColor() color.RGBA {
+func randomColor(rng *rand.Rand) color.RGBA {
 	red := rng.Intn(256)
 	green := rng.Intn(256)
 	blue := rng.Intn(256)
@@ -209,14 +216,14 @@ func drawSineCurve(img *image.NRGBA, opts *Options) {
 	if opts.width <= 40 {
 		xStart, xEnd = 1, opts.width-1
 	} else {
-		xStart = rng.Intn(opts.width/10) + 1
-		xEnd = opts.width - rng.Intn(opts.width/10) - 1
+		xStart = opts.rng.Intn(opts.width/10) + 1
+		xEnd = opts.width - opts.rng.Intn(opts.width/10) - 1
 	}
-	curveHeight := float64(rng.Intn(opts.height/6) + opts.height/6)
-	yStart := rng.Intn(opts.height*2/3) + opts.height/6
-	angle := 1.0 + rng.Float64()
+	curveHeight := float64(opts.rng.Intn(opts.height/6) + opts.height/6)
+	yStart := opts.rng.Intn(opts.height*2/3) + opts.height/6
+	angle := 1.0 + opts.rng.Float64()
 	yFlip := 1.0
-	if rng.Intn(2) == 0 {
+	if opts.rng.Intn(2) == 0 {
 		yFlip = -1.0
 	}
 	curveColor := randomColorFromOptions(opts)
@@ -236,15 +243,15 @@ func drawText(text string, img *image.NRGBA, opts *Options) error { // nolint: i
 	ctx.SetFont(ttfFont)
 
 	fontSpacing := opts.width / len(text)
-	fontOffset := rng.Intn(fontSpacing / 2)
+	fontOffset := opts.rng.Intn(fontSpacing / 2)
 
 	for idx, char := range text {
-		fontScale := 0.8 + rng.Float64()*0.4
+		fontScale := 0.8 + opts.rng.Float64()*0.4
 		fontSize := float64(opts.height) / fontScale * opts.FontScale
 		ctx.SetFontSize(fontSize)
 		ctx.SetSrc(image.NewUniform(randomColorFromOptions(opts)))
 		x := fontSpacing*idx + fontOffset
-		y := opts.height/6 + rng.Intn(opts.height/3) + int(fontSize/2)
+		y := opts.height/6 + opts.rng.Intn(opts.height/3) + int(fontSize/2)
 		pt := freetype.Pt(x, y)
 		if _, err := ctx.DrawString(string(char), pt); err != nil {
 			return err
@@ -257,13 +264,13 @@ func drawText(text string, img *image.NRGBA, opts *Options) error { // nolint: i
 func randomColorFromOptions(opts *Options) color.Color {
 	length := len(opts.Palette)
 	if length == 0 {
-		return randomInvertColor(opts.BackgroundColor)
+		return randomInvertColor(opts.rng, opts.BackgroundColor)
 	}
 
-	return opts.Palette[rng.Intn(length)]
+	return opts.Palette[opts.rng.Intn(length)]
 }
 
-func randomInvertColor(base color.Color) color.Color {
+func randomInvertColor(rng *rand.Rand, base color.Color) color.Color {
 	baseLightness := getLightness(base)
 	var value float64
 	if baseLightness >= 0.5 {
@@ -314,7 +321,7 @@ func minColor(numList ...uint32) (min uint32) {
 	return min
 }
 
-func randomEquation() (text string, equation string) {
+func randomEquation(rng *rand.Rand) (text string, equation string) {
 	left := 1 + rng.Intn(9)
 	right := 1 + rng.Intn(9)
 	text = strconv.Itoa(left + right)
