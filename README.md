@@ -45,4 +45,4 @@ If your found a bug, please contribute!
 see [contributing.md](contributing.md) for more detail.
 
 ## License
-[MIT](LICENSE.md) or [Anti-996](LICENSE-ANTI-996)
+[MIT](LICENSE.md)
