@@ -3,7 +3,7 @@
 <div>
 
 [![GoDoc](https://godoc.org/github.com/steambap/captcha?status.svg)](https://godoc.org/github.com/steambap/captcha)
-[![Build Status](https://travis-ci.org/steambap/captcha.svg)](https://travis-ci.org/steambap/captcha)
+[![Build Status](https://github.com/steambap/captcha/workflows/CI/badge.svg)](https://github.com/steambap/captcha/actions?workflow=CI)
 [![codecov](https://codecov.io/gh/steambap/captcha/branch/master/graph/badge.svg)](https://codecov.io/gh/steambap/captcha)
 [![Go Report Card](https://goreportcard.com/badge/github.com/steambap/captcha)](https://goreportcard.com/report/github.com/steambap/captcha)
 
