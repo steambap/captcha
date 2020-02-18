@@ -78,7 +78,7 @@ func TestNewMathExpr(t *testing.T) {
 	}
 }
 
-func TestCovNilFontError(t *testing.T) {
+func TestNilFontError(t *testing.T) {
 	temp := ttfFont
 	ttfFont = nil
 
@@ -101,7 +101,7 @@ func (errReader) Read(_ []byte) (int, error) {
 	return 0, errors.New("")
 }
 
-func TestCovReaderErr(t *testing.T) {
+func TestReaderErr(t *testing.T) {
 	err := LoadFontFromReader(errReader{})
 	if err == nil {
 		t.Fatal("Expect to get io.Reader error")
