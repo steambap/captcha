@@ -22,7 +22,6 @@ import (
 
 const charPreset = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"
 
-var rng = rand.New(rand.NewSource(time.Now().UnixNano()))
 var ttfFont *truetype.Font
 
 // Options manage captcha generation details.
@@ -105,6 +104,7 @@ func (data *Data) WriteGIF(w io.Writer, o *gif.Options) error {
 
 func init() {
 	ttfFont, _ = freetype.ParseFont(ttf)
+	rand.Seed(time.Now().UnixNano())
 }
 
 // LoadFont let you load an external font.
@@ -169,7 +169,7 @@ func NewMathExpr(width int, height int, option ...SetOption) (*Data, error) {
 func randomText(opts *Options) (text string) {
 	n := len(opts.CharPreset)
 	for i := 0; i < opts.TextLength; i++ {
-		text += string(opts.CharPreset[rng.Intn(n)])
+		text += string(opts.CharPreset[rand.Intn(n)])
 	}
 
 	return text
@@ -178,16 +178,16 @@ func randomText(opts *Options) (text string) {
 func drawNoise(img *image.NRGBA, opts *Options) {
 	noiseCount := (opts.width * opts.height) / int(28.0/opts.Noise)
 	for i := 0; i < noiseCount; i++ {
-		x := rng.Intn(opts.width)
-		y := rng.Intn(opts.height)
+		x := rand.Intn(opts.width)
+		y := rand.Intn(opts.height)
 		img.Set(x, y, randomColor())
 	}
 }
 
 func randomColor() color.RGBA {
-	red := rng.Intn(256)
-	green := rng.Intn(256)
-	blue := rng.Intn(256)
+	red := rand.Intn(256)
+	green := rand.Intn(256)
+	blue := rand.Intn(256)
 
 	return color.RGBA{R: uint8(red), G: uint8(green), B: uint8(blue), A: uint8(255)}
 }
@@ -205,14 +205,14 @@ func drawSineCurve(img *image.NRGBA, opts *Options) {
 	if opts.width <= 40 {
 		xStart, xEnd = 1, opts.width-1
 	} else {
-		xStart = rng.Intn(opts.width/10) + 1
-		xEnd = opts.width - rng.Intn(opts.width/10) - 1
+		xStart = rand.Intn(opts.width/10) + 1
+		xEnd = opts.width - rand.Intn(opts.width/10) - 1
 	}
-	curveHeight := float64(rng.Intn(opts.height/6) + opts.height/6)
-	yStart := rng.Intn(opts.height*2/3) + opts.height/6
-	angle := 1.0 + rng.Float64()
+	curveHeight := float64(rand.Intn(opts.height/6) + opts.height/6)
+	yStart := rand.Intn(opts.height*2/3) + opts.height/6
+	angle := 1.0 + rand.Float64()
 	yFlip := 1.0
-	if rng.Intn(2) == 0 {
+	if rand.Intn(2) == 0 {
 		yFlip = -1.0
 	}
 	curveColor := randomColorFromOptions(opts)
@@ -232,15 +232,15 @@ func drawText(text string, img *image.NRGBA, opts *Options) error {
 	ctx.SetFont(ttfFont)
 
 	fontSpacing := opts.width / len(text)
-	fontOffset := rng.Intn(fontSpacing / 2)
+	fontOffset := rand.Intn(fontSpacing / 2)
 
 	for idx, char := range text {
-		fontScale := 0.8 + rng.Float64()*0.4
+		fontScale := 0.8 + rand.Float64()*0.4
 		fontSize := float64(opts.height) / fontScale * opts.FontScale
 		ctx.SetFontSize(fontSize)
 		ctx.SetSrc(image.NewUniform(randomColorFromOptions(opts)))
 		x := fontSpacing*idx + fontOffset
-		y := opts.height/6 + rng.Intn(opts.height/3) + int(fontSize/2)
+		y := opts.height/6 + rand.Intn(opts.height/3) + int(fontSize/2)
 		pt := freetype.Pt(x, y)
 		if _, err := ctx.DrawString(string(char), pt); err != nil {
 			return err
@@ -256,19 +256,19 @@ func randomColorFromOptions(opts *Options) color.Color {
 		return randomInvertColor(opts.BackgroundColor)
 	}
 
-	return opts.Palette[rng.Intn(length)]
+	return opts.Palette[rand.Intn(length)]
 }
 
 func randomInvertColor(base color.Color) color.Color {
 	baseLightness := getLightness(base)
 	var value float64
 	if baseLightness >= 0.5 {
-		value = baseLightness - 0.3 - rng.Float64()*0.2
+		value = baseLightness - 0.3 - rand.Float64()*0.2
 	} else {
-		value = baseLightness + 0.3 + rng.Float64()*0.2
+		value = baseLightness + 0.3 + rand.Float64()*0.2
 	}
-	hue := float64(rng.Intn(361)) / 360
-	saturation := 0.6 + rng.Float64()*0.2
+	hue := float64(rand.Intn(361)) / 360
+	saturation := 0.6 + rand.Float64()*0.2
 
 	return hsva{h: hue, s: saturation, v: value, a: 255}
 }
@@ -311,8 +311,8 @@ func minColor(numList ...uint32) (min uint32) {
 }
 
 func randomEquation() (text string, equation string) {
-	left := 1 + rng.Intn(9)
-	right := 1 + rng.Intn(9)
+	left := 1 + rand.Intn(9)
+	right := 1 + rand.Intn(9)
 	text = strconv.Itoa(left + right)
 	equation = strconv.Itoa(left) + "+" + strconv.Itoa(right)
 
