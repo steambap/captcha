@@ -4,7 +4,7 @@
 
 [![GoDoc](https://godoc.org/github.com/steambap/captcha?status.svg)](https://godoc.org/github.com/steambap/captcha)
 [![Build Status](https://github.com/steambap/captcha/workflows/CI/badge.svg)](https://github.com/steambap/captcha/actions?workflow=CI)
-[![codecov](https://codecov.io/gh/steambap/captcha/branch/master/graph/badge.svg)](https://codecov.io/gh/steambap/captcha)
+[![codecov](https://codecov.io/gh/steambap/captcha/branch/main/graph/badge.svg)](https://codecov.io/gh/steambap/captcha)
 [![Go Report Card](https://goreportcard.com/badge/github.com/steambap/captcha)](https://goreportcard.com/report/github.com/steambap/captcha)
 
 </div>
