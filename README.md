@@ -2,7 +2,7 @@
 
 <div>
 
-[![GoDoc](https://godoc.org/github.com/steambap/captcha?status.svg)](https://godoc.org/github.com/steambap/captcha)
+[![PkgGoDev](https://pkg.go.dev/badge/steambap/captcha)](https://pkg.go.dev/steambap/captcha)
 [![Build Status](https://github.com/steambap/captcha/workflows/CI/badge.svg)](https://github.com/steambap/captcha/actions?workflow=CI)
 [![codecov](https://codecov.io/gh/steambap/captcha/branch/main/graph/badge.svg)](https://codecov.io/gh/steambap/captcha)
 [![Go Report Card](https://goreportcard.com/badge/github.com/steambap/captcha)](https://goreportcard.com/report/github.com/steambap/captcha)
