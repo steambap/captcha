@@ -48,8 +48,6 @@ This package is in a module and I recommand using the following version of Go:
 * 1.10.3+ for Go 1.10
 * Go 1.11 or later
 
-## Benchmarks
-
 ## Contributing
 If your found a bug, please contribute!
 see [contributing.md](contributing.md) for more detail.
