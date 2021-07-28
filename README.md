@@ -42,7 +42,7 @@ func handle(w http.ResponseWriter, r *http.Request) {
 
 ## Compatibility
 
-This package uses embed package from Go 1.16. If for some reason you have to use pre 1.16 version of Go, reference pre 1.4 version of this module in your go.mod.
+This package uses embed package from Go 1.16. If for some reasons you have to use pre 1.16 version of Go, reference pre 1.4 version of this module in your go.mod.
 
 ## Contributing
 If your found a bug, please contribute!

@@ -3,7 +3,7 @@ package captcha
 
 import (
 	"bytes"
-	_ "embed"
+	_ "embed" // embed font
 	"image"
 	"image/color"
 	"image/draw"
