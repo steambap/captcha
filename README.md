@@ -42,11 +42,7 @@ func handle(w http.ResponseWriter, r *http.Request) {
 
 ## Compatibility
 
-This package is in a module and I recommand using the following version of Go:
-
-* 1.9.7+ for Go 1.9
-* 1.10.3+ for Go 1.10
-* Go 1.11 or later
+This package uses embed package from Go 1.16. If for some reason you have to use pre 1.16 version of Go, reference pre 1.4 version of this module in your go.mod.
 
 ## Contributing
 If your found a bug, please contribute!

@@ -3,6 +3,7 @@ package captcha
 
 import (
 	"bytes"
+	_ "embed"
 	"image"
 	"image/color"
 	"image/draw"
@@ -22,6 +23,8 @@ import (
 
 const charPreset = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"
 
+//go:embed fonts/Comismsh.ttf
+var ttf []byte
 var ttfFont *truetype.Font
 
 // Options manage captcha generation details.
@@ -134,7 +137,7 @@ func New(width int, height int, option ...SetOption) (*Data, error) {
 
 	text := randomText(options)
 	img := image.NewNRGBA(image.Rect(0, 0, width, height))
-	draw.Draw(img, img.Bounds(), &image.Uniform{options.BackgroundColor}, image.ZP, draw.Src)
+	draw.Draw(img, img.Bounds(), &image.Uniform{options.BackgroundColor}, image.Point{}, draw.Src)
 	drawNoise(img, options)
 	drawCurves(img, options)
 	err := drawText(text, img, options)
@@ -155,7 +158,7 @@ func NewMathExpr(width int, height int, option ...SetOption) (*Data, error) {
 
 	text, equation := randomEquation()
 	img := image.NewNRGBA(image.Rect(0, 0, width, height))
-	draw.Draw(img, img.Bounds(), &image.Uniform{options.BackgroundColor}, image.ZP, draw.Src)
+	draw.Draw(img, img.Bounds(), &image.Uniform{options.BackgroundColor}, image.Point{}, draw.Src)
 	drawNoise(img, options)
 	drawCurves(img, options)
 	err := drawText(equation, img, options)
