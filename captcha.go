@@ -2,7 +2,6 @@
 package captcha
 
 import (
-	"bytes"
 	_ "embed" // embed font
 	"image"
 	"image/color"
@@ -119,12 +118,12 @@ func LoadFont(fontData []byte) error {
 
 // LoadFontFromReader load an external font from an io.Reader interface.
 func LoadFontFromReader(reader io.Reader) error {
-	var buf bytes.Buffer
-	if _, err := io.Copy(&buf, reader); err != nil {
+	b, err := io.ReadAll(reader)
+	if err != nil {
 		return err
 	}
 
-	return LoadFont(buf.Bytes())
+	return LoadFont(b)
 }
 
 // New creates a new captcha.
