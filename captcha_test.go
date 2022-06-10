@@ -78,6 +78,15 @@ func TestNewMathExpr(t *testing.T) {
 	}
 }
 
+func TestNewCustomGenerator(t *testing.T) {
+	_, err := NewCustomGenerator(150, 50, func() (anwser string, question string) {
+		return "1", "2"
+	})
+	if err != nil {
+		t.Fatal(err)
+	}
+}
+
 func TestNilFontError(t *testing.T) {
 	temp := ttfFont
 	ttfFont = nil

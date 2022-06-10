@@ -168,6 +168,28 @@ func NewMathExpr(width int, height int, option ...SetOption) (*Data, error) {
 	return &Data{Text: text, img: img}, nil
 }
 
+// NewCustomGenerator creates a new captcha based on a custom text generator.
+func NewCustomGenerator(
+	width int, height int, generator func() (anwser string, question string), option ...SetOption,
+) (*Data, error) {
+	options := newDefaultOption(width, height)
+	for _, setOption := range option {
+		setOption(options)
+	}
+
+	answer, question := generator()
+	img := image.NewNRGBA(image.Rect(0, 0, width, height))
+	draw.Draw(img, img.Bounds(), &image.Uniform{options.BackgroundColor}, image.Point{}, draw.Src)
+	drawNoise(img, options)
+	drawCurves(img, options)
+	err := drawText(question, img, options)
+	if err != nil {
+		return nil, err
+	}
+
+	return &Data{Text: answer, img: img}, nil
+}
+
 func randomText(opts *Options) (text string) {
 	n := len(opts.CharPreset)
 	for i := 0; i < opts.TextLength; i++ {
