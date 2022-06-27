@@ -136,11 +136,7 @@ func New(width int, height int, option ...SetOption) (*Data, error) {
 
 	text := randomText(options)
 	img := image.NewNRGBA(image.Rect(0, 0, width, height))
-	draw.Draw(img, img.Bounds(), &image.Uniform{options.BackgroundColor}, image.Point{}, draw.Src)
-	drawNoise(img, options)
-	drawCurves(img, options)
-	err := drawText(text, img, options)
-	if err != nil {
+	if err := drawWithOption(text, img, options); err != nil {
 		return nil, err
 	}
 
@@ -157,11 +153,7 @@ func NewMathExpr(width int, height int, option ...SetOption) (*Data, error) {
 
 	text, equation := randomEquation()
 	img := image.NewNRGBA(image.Rect(0, 0, width, height))
-	draw.Draw(img, img.Bounds(), &image.Uniform{options.BackgroundColor}, image.Point{}, draw.Src)
-	drawNoise(img, options)
-	drawCurves(img, options)
-	err := drawText(equation, img, options)
-	if err != nil {
+	if err := drawWithOption(equation, img, options); err != nil {
 		return nil, err
 	}
 
@@ -179,15 +171,18 @@ func NewCustomGenerator(
 
 	answer, question := generator()
 	img := image.NewNRGBA(image.Rect(0, 0, width, height))
-	draw.Draw(img, img.Bounds(), &image.Uniform{options.BackgroundColor}, image.Point{}, draw.Src)
-	drawNoise(img, options)
-	drawCurves(img, options)
-	err := drawText(question, img, options)
-	if err != nil {
+	if err := drawWithOption(question, img, options); err != nil {
 		return nil, err
 	}
 
 	return &Data{Text: answer, img: img}, nil
+}
+
+func drawWithOption(text string, img *image.NRGBA, options *Options) error {
+	draw.Draw(img, img.Bounds(), &image.Uniform{options.BackgroundColor}, image.Point{}, draw.Src)
+	drawNoise(img, options)
+	drawCurves(img, options)
+	return drawText(text, img, options)
 }
 
 func randomText(opts *Options) (text string) {
