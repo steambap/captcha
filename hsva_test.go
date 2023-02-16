@@ -3,6 +3,7 @@ package captcha
 import (
 	"fmt"
 	"image/color"
+	"math"
 	"testing"
 )
 
@@ -55,7 +56,7 @@ func TestConversionRGB(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	var blue1 color.Color = hsva{h: 240.0 / 360.0, s: 0.75, v: 0.8, a: uint8(255)}
+	var blue1 color.Color = hsva{h: fl(240.0 / 360.0), s: 0.75, v: 0.8, a: uint8(255)}
 	var blue2 color.Color = color.RGBA{R: uint8(51), G: uint8(51), B: uint8(204), A: uint8(255)}
 
 	if err := eq(blue1, blue2); err != nil {
@@ -78,4 +79,10 @@ func eq(c0, c1 color.Color) error {
 			r0, g0, b0, a0, r1, g1, b1, a1)
 	}
 	return nil
+}
+
+func fl(n float64) float64 {
+	out := math.Pow10(15)
+	rnd := int(n*out + math.Copysign(0.5, n*out))
+	return float64(rnd) / out
 }
