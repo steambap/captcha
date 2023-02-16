@@ -186,9 +186,9 @@ func drawWithOption(text string, img *image.NRGBA, options *Options) error {
 }
 
 func randomText(opts *Options) (text string) {
-	n := len(opts.CharPreset)
+	n := len([]rune(opts.CharPreset))
 	for i := 0; i < opts.TextLength; i++ {
-		text += string(opts.CharPreset[rand.Intn(n)])
+		text += string([]rune(opts.CharPreset)[rand.Intn(n)])
 	}
 
 	return text
