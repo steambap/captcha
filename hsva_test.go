@@ -56,7 +56,7 @@ func TestConversionRGB(t *testing.T) {
 	}
 
 	var blue1 color.Color = hsva{h: 240.0 / 360.0, s: 0.75, v: 0.8, a: uint8(255)}
-	var blue2 color.Color = color.RGBA{R: uint8(50), G: uint8(51), B: uint8(204), A: uint8(255)}
+	var blue2 color.Color = color.RGBA{R: uint8(51), G: uint8(51), B: uint8(204), A: uint8(255)}
 
 	if err := eq(blue1, blue2); err != nil {
 		t.Fatal(err)
