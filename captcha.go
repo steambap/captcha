@@ -13,7 +13,6 @@ import (
 	"math"
 	"math/rand"
 	"strconv"
-	"time"
 
 	"github.com/golang/freetype"
 	"github.com/golang/freetype/truetype"
@@ -106,7 +105,6 @@ func (data *Data) WriteGIF(w io.Writer, o *gif.Options) error {
 
 func init() {
 	ttfFont, _ = freetype.ParseFont(ttf)
-	rand.Seed(time.Now().UnixNano())
 }
 
 // LoadFont let you load an external font.
